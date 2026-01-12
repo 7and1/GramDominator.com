@@ -1,0 +1,33 @@
+name = "gramdominator-scraper"
+main = "src/index.ts"
+compatibility_date = "2026-01-08"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# Browser Rendering binding
+[browser]
+binding = "MYBROWSER"
+
+# Workers AI binding
+[ai]
+binding = "AI"
+
+# D1 database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "followers-db"
+# Set via environment variable: CLOUDFLARE_D1_DATABASE_ID
+database_id = ""
+
+# Cron schedule (every 6 hours)
+[triggers]
+crons = ["0 */6 * * *"]
+
+# Set with: wrangler secret put CRON_SECRET
+
+# Optional vars (set via `wrangler secret put` or `wrangler vars put`):
+# - API_TOKEN: token for /api/v1 endpoints
+# - AI_TAG_LIMIT: max AI tags per run (default 15)
+# - PROXY_GRID_SECRET: secret for Proxy Grid fallback
+# - PROXY_GRID_BASE: override base URL (default http://google.savedimage.com)
+# - SLACK_WEBHOOK_URL: notify on scraper fallback/error

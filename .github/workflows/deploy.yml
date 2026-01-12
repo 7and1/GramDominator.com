@@ -1,0 +1,56 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Create wrangler.toml from environment variables
+        run: |
+          cat > wrangler.toml << 'EOF'
+          name = "gramdominator-scraper"
+          main = "src/index.ts"
+          compatibility_date = "2026-01-08"
+          compatibility_flags = ["nodejs_compat"]
+          workers_dev = true
+
+          [browser]
+          binding = "MYBROWSER"
+
+          [ai]
+          binding = "AI"
+
+          [[d1_databases]]
+          binding = "DB"
+          database_name = "followers-db"
+          database_id = "${{ secrets.CLOUDFLARE_D1_DATABASE_ID }}"
+
+          [triggers]
+          crons = ["0 */6 * * *"]
+          EOF
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

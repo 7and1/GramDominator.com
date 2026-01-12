@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: 13 17 23;
+  --color-sand: 244 238 229;
+  --color-blaze: 255 122 61;
+  --color-mint: 72 216 193;
+}
+
+body {
+  font-family: var(--font-body);
+  color: rgb(var(--color-ink));
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 122, 61, 0.16),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(72, 216, 193, 0.18),
+      transparent 50%
+    ),
+    linear-gradient(120deg, #f9f6f1 0%, #f5efe7 55%, #f7f2ea 100%);
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(255, 122, 61, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.section-title {
+  letter-spacing: -0.02em;
+}
+
+.fade-up {
+  animation: fade-up 0.6s ease both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid-fade > * {
+  animation: fade-up 0.7s ease both;
+}
+
+.grid-fade > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.grid-fade > *:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.grid-fade > *:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
