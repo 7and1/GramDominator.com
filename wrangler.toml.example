@@ -2,10 +2,9 @@ name = "gramdominator-scraper"
 main = "src/index.ts"
 compatibility_date = "2026-01-08"
 compatibility_flags = ["nodejs_compat"]
-
-# SECURITY: account_id should be set via CLOUDFLARE_ACCOUNT_ID environment variable
-# Never commit your actual account_id to version control
-# account_id = "YOUR_ACCOUNT_ID_HERE"
+# account_id is set via CLOUDFLARE_ACCOUNT_ID environment variable
+# Run: export CLOUDFLARE_ACCOUNT_ID="your-account-id"
+# Or set in GitHub Secrets: CLOUDFLARE_ACCOUNT_ID
 
 # Browser Rendering binding
 [browser]
@@ -16,15 +15,12 @@ binding = "MYBROWSER"
 binding = "AI"
 
 # D1 database binding
-# IMPORTANT: Create D1 database first:
-# 1. Run: wrangler d1 create gramdominator-db
-# 2. Copy the database_id from the output
-# 3. Add it to your wrangler.toml (not committed to git)
-# 4. Or set via GitHub Secrets: D1_DATABASE_ID
+# database_id is managed via wrangler secret: D1_DATABASE_ID
+# Run: wrangler d1 create gramdominator-db or wrangler d1 list
+# Then set: wrangler secret put D1_DATABASE_ID --env production
 [[d1_databases]]
 binding = "DB"
 database_name = "gramdominator-db"
-# database_id = "YOUR_D1_DATABASE_ID_HERE"
 
 # Cron schedule (every 6 hours)
 [triggers]

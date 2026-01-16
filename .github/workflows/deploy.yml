@@ -2,13 +2,15 @@ name: Deploy to Cloudflare Workers
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to Cloudflare Workers
+    name: Deploy to Cloudflare
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,21 +20,21 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Create wrangler.toml from template
-        run: |
-          cp wrangler.toml.example wrangler.toml
-          echo "" >> wrangler.toml
-          echo "# Auto-generated from GitHub Secrets" >> wrangler.toml
-          echo "account_id = \"${{ secrets.CLOUDFLARE_ACCOUNT_ID }}\"" >> wrangler.toml
+      - name: Build project
+        run: npm run build
+        env:
+          NODE_ENV: production
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: \${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: \${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env production
         env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCOUNT_ID: \${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
