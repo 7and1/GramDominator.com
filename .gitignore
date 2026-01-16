@@ -24,6 +24,7 @@ dist/
 .wrangler/
 wrangler.toml
 .wrangler.toml
+.wrangler.toml.bak
 
 # Testing
 coverage/
